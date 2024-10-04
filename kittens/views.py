@@ -20,3 +20,7 @@ class KittenListView(generics.ListAPIView):
             queryset = queryset.filter(breed=breed_id)
 
         return queryset
+
+class KittenDetailView(generics.RetrieveAPIView):
+    queryset = Kitten.objects.all()
+    serializer_class = KittenSerializer
