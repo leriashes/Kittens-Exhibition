@@ -11,3 +11,12 @@ class BreedListView(generics.ListAPIView):
 class KittenListView(generics.ListAPIView):
     queryset = Kitten.objects.all()
     serializer_class = KittenSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        breed_id = self.request.query_params.get('breed')
+
+        if breed_id:
+            queryset = queryset.filter(breed=breed_id)
+
+        return queryset
