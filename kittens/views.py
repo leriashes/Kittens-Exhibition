@@ -7,3 +7,7 @@ from .serializers import *
 class BreedListView(generics.ListAPIView):
     queryset = Breed.objects.all()
     serializer_class = BreedSerializer
+
+class KittenListView(generics.ListAPIView):
+    queryset = Kitten.objects.all()
+    serializer_class = KittenSerializer
