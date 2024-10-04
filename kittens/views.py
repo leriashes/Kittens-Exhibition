@@ -34,3 +34,14 @@ class KittenCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+class KittenUpdateView(generics.UpdateAPIView):
+    queryset = Kitten.objects.all()
+    serializer_class = KittenSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_update(self, serializer):
+        kitten = self.get_object()
+        if kitten.owner != self.request.user:
+            raise PermissionDenied("You can't edit this kitten")
+        serializer.save()

@@ -6,8 +6,9 @@ urlpatterns = [
     path('breeds/', BreedListView.as_view(), name='breed-list'),
 
     path('kittens/', KittenListView.as_view(), name='kitten-list'),
-    path('kittens/<int:pk>/', KittenDetailView.as_view(), name='kitten-detail'),
     path('kittens/create/', KittenCreateView.as_view(), name='kitten-create'),
+    path('kittens/<int:pk>/', KittenDetailView.as_view(), name='kitten-detail'),
+    path('kittens/<int:pk>/edit/', KittenUpdateView.as_view(), name='kitten-update'),
 
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
