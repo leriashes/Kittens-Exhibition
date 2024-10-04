@@ -26,3 +26,11 @@ class KittenListView(generics.ListAPIView):
 class KittenDetailView(generics.RetrieveAPIView):
     queryset = Kitten.objects.all()
     serializer_class = KittenSerializer
+
+class KittenCreateView(generics.CreateAPIView):
+    queryset = Kitten.objects.all()
+    serializer_class = KittenSerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)

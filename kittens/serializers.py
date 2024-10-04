@@ -7,6 +7,8 @@ class BreedSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class KittenSerializer(serializers.ModelSerializer):
+    owner = serializers.PrimaryKeyRelatedField(read_only=True)
+
     class Meta:
         model = Kitten
         fields = '__all__'
