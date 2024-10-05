@@ -12,3 +12,8 @@ class KittenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Kitten
         fields = '__all__'
+    
+class RatingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rating
+        fields = ['kitten', 'value']

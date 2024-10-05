@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core import validators
 
 # Create your models here.
 class Breed(models.Model):
@@ -21,10 +22,16 @@ class Kitten(models.Model):
         return self.name
 
 class Rating(models.Model):
-    value = models.PositiveIntegerField()
+    value = models.IntegerField(validators=[
+        validators.MinValueValidator(1),
+        validators.MaxValueValidator(5)
+    ])
 
     kitten = models.ForeignKey(Kitten, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('kitten', 'user')
 
     def __str__(self):
         return str(self.value)
