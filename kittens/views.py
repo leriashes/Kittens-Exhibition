@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .models import *
 from .serializers import *
 
@@ -10,9 +10,10 @@ class BreedListView(generics.ListAPIView):
     queryset = Breed.objects.all()
     serializer_class = BreedSerializer
 
-class KittenListView(generics.ListAPIView):
+class KittenListCreateView(generics.ListCreateAPIView):
     queryset = Kitten.objects.all()
     serializer_class = KittenSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -23,25 +24,20 @@ class KittenListView(generics.ListAPIView):
 
         return queryset
 
-class KittenDetailView(generics.RetrieveAPIView):
-    queryset = Kitten.objects.all()
-    serializer_class = KittenSerializer
-
-class KittenCreateView(generics.CreateAPIView):
-    queryset = Kitten.objects.all()
-    serializer_class = KittenSerializer
-    permission_classes = [IsAuthenticated]
-
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
-class KittenUpdateView(generics.UpdateAPIView):
+class KittenRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Kitten.objects.all()
     serializer_class = KittenSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def perform_update(self, serializer):
-        kitten = self.get_object()
-        if kitten.owner != self.request.user:
+        if serializer.instance.owner != self.request.user:
             raise PermissionDenied("You can't edit this kitten")
         serializer.save()
+
+    def perform_destroy(self, instance):
+        if instance.owner != self.request.user:
+            raise PermissionDenied("You can't delete this kitten")
+        instance.delete()
