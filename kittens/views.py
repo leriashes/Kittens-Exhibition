@@ -13,7 +13,7 @@ class BreedListView(generics.ListAPIView):
 
 class KittenListCreateView(generics.ListCreateAPIView):
     queryset = Kitten.objects.all()
-    serializer_class = KittenSerializer
+    serializer_class = KittenListSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
@@ -30,7 +30,7 @@ class KittenListCreateView(generics.ListCreateAPIView):
 
 class KittenRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Kitten.objects.all()
-    serializer_class = KittenSerializer
+    serializer_class = KittenDetailSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def perform_update(self, serializer):
